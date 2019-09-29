@@ -1,5 +1,5 @@
 import requests
-from typing import List
+from typing import List, Dict, Any
 
 
 class BaseClient:
@@ -9,6 +9,15 @@ class BaseClient:
         self.userlist = None
         self.nickname = None
 
+    def ping_server(self) -> Dict[str, Any]:
+        return dict()
+
+    def check_ping_response(self, resp: Dict[str, Any]) -> bool:
+        if not (isinstance(resp, dict) and 'status' in resp):
+            return False
+        check_result = resp['status'] == 'OK'
+        return check_result
+    
     def launch(self) -> bool:
         try:
             ping_resp = requests.get(f'{self.server_address}/ping')
